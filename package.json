@@ -18,6 +18,7 @@
   "dependencies": {
     "dotenv": "^8.2.0",
     "jmongo": "^2.0.2",
+    "pg": "^7.4.3",
     "telegraf": "^3.38.0",
     "telegraf-command-parts": "^1.0.3"
   }
