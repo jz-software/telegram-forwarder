@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS authentication( 
+    id BIGSERIAL PRIMARY KEY, 
+    string_session TEXT NOT NULL 
+);
+
+CREATE TABLE IF NOT EXISTS redirect(     
+    id SERIAL PRIMARY KEY,
+    title TEXT,
+    origin BIGINT NOT NULL,
+    destination BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);

@@ -6,13 +6,10 @@ from decouple import config
 # Connects to the database and gets the StringSession if there is any
 conn = psycopg2.connect(config('DATABASE_URL'))
 cursor = conn.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS authentication ( id BIGSERIAL PRIMARY KEY, string_session TEXT NOT NULL )')
+cursor.execute(open('./src/schema.sql', 'r').read())
 cursor.execute('SELECT * FROM authentication ORDER BY id DESC LIMIT 1') # get the last session
 row = cursor.fetchone()
-string_session = None
-while row is not None:
-    string_session = row[1]
-cursor.close()
+string_session = row[1]
 
 api_id = config('API_ID')
 api_hash = config('API_HASH')
