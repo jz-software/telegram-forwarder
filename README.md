@@ -6,7 +6,7 @@ It's main goal is to be simple in installation and usage.
 ## Installation
 Clone the repository
 ```bash
-git clone https://github.com/JMax45/telegram-forwarder.git
+git clone https://github.com/jz-software/telegram-forwarder.git
 ```
 
 #### NodeJs packages installation
