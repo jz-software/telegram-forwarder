@@ -5,6 +5,6 @@ module.exports = {
     execute(ctx, params){
         const { client } = params;
         ctx.scene.enter('auth', { client });
-        ctx.reply('Send me your phone number');
+        ctx.reply('📱 Send me your phone number');
     }
 }

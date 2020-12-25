@@ -15,7 +15,7 @@ module.exports = {
             if(err){
                 ctx.reply(err.message)
             } else {
-                ctx.reply('Redirect added successfully');
+                ctx.reply('📨 Redirect added successfully');
             }
         })
     }
