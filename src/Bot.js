@@ -29,6 +29,12 @@ class Bot{
 		const JMongo = require('jmongo');
 		const jmongo = new JMongo(process.env.DB_URL, process.env.DB_NAME);
 
+		fs.readFile('./src/db/schema.sql', 'utf8', function (err,data) { 
+			if (err) throw err;
+			const db = require('./db');
+			db.query(data);
+		});
+
 		// Client
 		const client = require('./Client');
 

@@ -6,7 +6,6 @@ from decouple import config
 # Connects to the database and gets the StringSession if there is any
 conn = psycopg2.connect(config('DATABASE_URL'))
 cursor = conn.cursor()
-cursor.execute(open('./src/db/schema.sql', 'r').read())
 cursor.execute('SELECT * FROM authentication ORDER BY id DESC LIMIT 1') # get the last session
 row = cursor.fetchone()
 string_session = None
