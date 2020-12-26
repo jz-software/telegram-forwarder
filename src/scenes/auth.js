@@ -5,9 +5,13 @@ const exampleWizard = new WizardScene(
     return ctx.wizard.next();
   },
   ctx => {
-    ctx.wizard.state.client.stdin.write(`${ctx.message.text}\n`);
-    ctx.reply("🔢 Send me the code you received");
-    return ctx.wizard.next();
+    if(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(ctx.message.text)){
+      ctx.wizard.state.client.stdin.write(`${ctx.message.text}\n`);
+      ctx.reply("🔢 Send me the code you received");
+      return ctx.wizard.next();
+    } else {
+      ctx.reply('📵 Sorry, this phone number is not valid. Please try again');
+    }
   },
   ctx => {
     ctx.wizard.state.client.stdout.on('data', function(data){
