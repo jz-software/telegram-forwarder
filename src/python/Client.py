@@ -31,6 +31,7 @@ if not client.is_user_authorized():
     cursor.execute('INSERT INTO authentication ( string_session ) VALUES ( %s )', ( client.session.save(), ))
     conn.commit()
     cursor.close()
+    input('auth:success')
 
 @client.on(events.NewMessage)
 async def my_event_handler(event):

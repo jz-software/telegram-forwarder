@@ -2,6 +2,10 @@ const WizardScene = require('telegraf/scenes/wizard');
 const exampleWizard = new WizardScene(
   'auth',
   ctx => {
+    ctx.wizard.state.client.stdout.on('end', function(){
+      ctx.reply('🚫 Sorry, there was an error, please try again');
+      return ctx.scene.leave();
+    });
     return ctx.wizard.next();
   },
   ctx => {
@@ -16,10 +20,14 @@ const exampleWizard = new WizardScene(
   ctx => {
     ctx.wizard.state.client.stdout.on('data', function(data){
       const message = data.toString().trim();
-      ctx.wizard.state.client.stdin.write(`\n`);
+      if(message==='auth:success'){
+        ctx.reply(`✅ You were authenticated successfully`);
+        ctx.wizard.state.client.stdin.write(`\n`);
+      } else {
+        ctx.reply('🚫 Sorry, there was an error, please try again');
+      }
     });
-    ctx.wizard.state.client.stdin.write(`${ctx.message.text.substring(1)}\n`);
-    ctx.reply(`✅ You were authenticated successfully`);
+    ctx.wizard.state.client.stdin.write(`${ctx.message.text}\n`);
     return ctx.scene.leave();
   }
 );
