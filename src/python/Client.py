@@ -39,10 +39,13 @@ async def my_event_handler(event):
     cursor.execute('SELECT * FROM redirect')
     table = cursor.fetchall()
     cursor.close()
-    sender = await event.get_sender()
-    found = [item for item in table if item[2] == sender.id]
+    chat = await event.get_chat()
+    print(chat.id)
+    found = [item for item in table if str(chat.id) in str(item[2])]
+    print(found, len(found))
     if len(found) >= 0:
         for item in found:
+            print(item[3])
             await client.send_message(item[3], event.message)
 
 client.start()

@@ -7,7 +7,7 @@ module.exports = {
     execute(ctx){
         const { splitArgs } = ctx.state.command;
         splitArgs[1] = splitArgs[1].startsWith('-100') ? splitArgs[1].substring(4) : splitArgs[1];
-        splitArgs[2] = splitArgs[2].startsWith('-100') ? splitArgs[2] : `-100${splitArgs[2]}`;
+        splitArgs[1] = splitArgs[1].replace(/\D/g,'');
         db.query({
             text: 'INSERT INTO redirect(title, origin, destination) VALUES($1, $2, $3)',
             values: splitArgs
