@@ -40,12 +40,9 @@ async def my_event_handler(event):
     table = cursor.fetchall()
     cursor.close()
     chat = await event.get_chat()
-    print(chat.id)
     found = [item for item in table if str(chat.id) in str(item[2])]
-    print(found, len(found))
     if len(found) >= 0:
         for item in found:
-            print(item[3])
             await client.send_message(item[3], event.message)
 
 client.start()
