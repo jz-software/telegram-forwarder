@@ -36,7 +36,8 @@ class Bot{
 		});
 
 		// Client
-		const client = require('./Client');
+		const Client = require('./Client');
+		const client = new Client();
 
 		// Responses
 		this.Responses = require('./Responses');
