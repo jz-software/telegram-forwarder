@@ -33,8 +33,8 @@ if not client.is_user_authorized():
     cursor.close()
     input('auth:success')
 
-@client.on(events.NewMessage)
-async def my_event_handler(event):
+@client.on(events.NewMessage(func=lambda e: not e.grouped_id))
+async def new_message_handler(event):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM redirect')
     table = cursor.fetchall()
@@ -44,6 +44,25 @@ async def my_event_handler(event):
     if len(found) >= 0:
         for item in found:
             await client.send_message(item[3], event.message)
+
+@client.on(events.Album)
+async def album_handler(event):
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM redirect')
+    table = cursor.fetchall()
+    cursor.close()
+    sender = await event.get_sender()
+    found = [item for item in table if str(sender.id) in str(item[2])]
+    if len(found) >= 0:
+        media = []
+        for x in event.messages:
+            media.append(x.media)
+        for item in found:
+            await client.send_message(
+                item[3],
+                file=media,
+                message=event.original_update.message.message,
+            )
 
 client.start()
 client.run_until_disconnected()
