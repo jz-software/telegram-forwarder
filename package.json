@@ -1,6 +1,6 @@
 {
   "name": "telegram-forwarder",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A simple but powerful telegram forwarder",
   "main": "index.js",
   "scripts": {
