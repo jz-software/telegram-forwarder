@@ -38,7 +38,15 @@ First of all you need to authenticate yourself, you can do this by writing **/au
 ##
 
 #### Adding new redirects
-You can add new redirects with the /add command
+You can add new redirects with the **/add** command. 
+
+Just follow the instructions and it will create a redirect for you. It uses your real chats and thus makes creation much easier.
+
+![alt text](https://i.ibb.co/C0t6qdK/Screenshot-2021-01-03-Telegram-Web.png)
+
+##
+If you're more experienced you can create redirects directly with one command.
+
 ```bash
 /add title origin destination
 ```
