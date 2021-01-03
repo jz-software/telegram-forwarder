@@ -8,6 +8,7 @@ conn = psycopg2.connect(config('DATABASE_URL'))
 cursor = conn.cursor()
 cursor.execute('SELECT * FROM authentication ORDER BY id DESC LIMIT 1') # get the last session
 row = cursor.fetchone()
+cursor.close()
 string_session = None
 try:
     string_session = row[1]
