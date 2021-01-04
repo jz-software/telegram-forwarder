@@ -12,7 +12,7 @@ class defaultResponses{
 
 // Define responses here
 class myResponses{
-	constructor(telegraf, jmongo, client){
+	constructor(telegraf, client){
 		// Default responses, comment out if not needed
 		telegraf = new defaultResponses(telegraf);
 
@@ -24,12 +24,7 @@ class myResponses{
 		files_commands.forEach(element => {
 			const command = require('./commands/'+element);
 			telegraf.command(command.name, (ctx) => {
-				// If access is not private then just execute, else check if the user is an admin
-				command.access != 'private' ? command.execute(ctx, { jmongo, client }) : 
-				jmongo.load('admins', { id: ctx.from.id }).then((result) => {
-					// If admin not found, reply. Else execute
-					result === null ? ctx.reply('You must be an admin to execute this command') : command.execute(ctx, { jmongo, client });
-				})
+				command.execute(ctx, { client });
 			})
 			if(command.public===true){ commands.push({ command: command.name, description: command.description }) };
 		});
@@ -49,8 +44,8 @@ class myResponses{
 }
 
 class Responses{
-	constructor(telegraf, jmongo, client){
-		telegraf = new myResponses(telegraf, jmongo, client);
+	constructor(telegraf, client){
+		telegraf = new myResponses(telegraf, client);
 		
 		return telegraf;
 	}

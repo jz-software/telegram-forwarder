@@ -25,10 +25,6 @@ class Bot{
 		this.telegraf.use(session());
 		this.telegraf.use(stage.middleware());
 
-		// JMongo
-		const JMongo = require('jmongo');
-		const jmongo = new JMongo(process.env.DB_URL, process.env.DB_NAME);
-
 		fs.readFile('./src/db/schema.sql', 'utf8', function (err,data) { 
 			if (err) throw err;
 			const db = require('./db');
@@ -41,7 +37,7 @@ class Bot{
 
 		// Responses
 		this.Responses = require('./Responses');
-		this.telegraf = new this.Responses(this.telegraf, jmongo, client);
+		this.telegraf = new this.Responses(this.telegraf, client);
 	}
 }
 
