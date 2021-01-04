@@ -11,8 +11,10 @@ module.exports = {
             const message = `📩 ${data.title}`
                 + `\n\nOrigin: ${data.origin}`
                 + `\nDestination: ${data.destination}`
+                + `\nActive: ${data.active}`
             const extra = Extra.markup(Markup.inlineKeyboard([
-                [Markup.callbackButton('🗑 Remove', `remove-${data.id}`)]
+                [Markup.callbackButton('🗑 Remove', `remove-${data.id}`)],
+                [Markup.callbackButton(data.active ? '🚫 Deactivate' : '✅ Activate', `edit-${data.id};active;${!data.active}`)]
             ]))
             ctx.editMessageText(message, extra);
         })

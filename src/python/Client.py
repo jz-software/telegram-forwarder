@@ -37,7 +37,7 @@ if not client.is_user_authorized():
 @client.on(events.NewMessage(func=lambda e: not e.grouped_id))
 async def new_message_handler(event):
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM redirect')
+    cursor.execute('SELECT * FROM redirect WHERE active = true')
     table = cursor.fetchall()
     cursor.close()
     chat = await event.get_chat()
@@ -49,7 +49,7 @@ async def new_message_handler(event):
 @client.on(events.Album)
 async def album_handler(event):
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM redirect')
+    cursor.execute('SELECT * FROM redirect active = true')
     table = cursor.fetchall()
     cursor.close()
     sender = await event.get_sender()
