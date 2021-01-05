@@ -25,6 +25,7 @@ handler.action(/^submitOrigin.*$/, (ctx) => {
   ctx.answerCbQuery();
   const originId = ctx.match[0].split(';')[1].startsWith('-100') ? ctx.match[0].split(';')[1].substring(4) : ctx.match[0].split(';')[1];
   ctx.wizard.state.submit.push(originId);
+  ctx.wizard.state.origin = ctx.match[0].split(';')[1];
   ctx.wizard.state.currentCallbackQuery = 'submitDestination';
   ctx.wizard.state.message += `\n\nOrigin: ${ctx.wizard.state.submit[0]}`;
   ctx.wizard.state.currentRequirement = '\n\nPlease select the destination chat';
@@ -45,10 +46,29 @@ handler.on('text', (ctx) => {
   ctx.wizard.state.submit.push(ctx.message.text);
   ctx.wizard.state.message += `\nTitle: ${ctx.wizard.state.submit[2]}`;
   const { message } = ctx.wizard.state;
-  ctx.reply(message+'\n\nPlease confirm', Extra.markup(Markup.inlineKeyboard([Markup.callbackButton('Confirm', `submitAll`)])));
+  ctx.reply(message+'\n\nDo you want to redirect all the previous messages?', 
+    Extra.markup(Markup.inlineKeyboard([
+      [Markup.callbackButton('Yes', `previous-true`)],
+      [Markup.callbackButton('No', 'previous-false')]
+    ]))
+  )
+  return ctx.wizard.next();
+})
+handler.action(/^previous.*$/, (ctx) => {
+  const prev = ctx.match[0].split('-')[1];
+  ctx.wizard.state.prev = prev;
+  ctx.wizard.state.message += `\nRecover previous messages: ${prev}`;
+  const { message } = ctx.wizard.state;
+  ctx.editMessageText(message+'\n\nPlease confirm', Extra.markup(Markup.inlineKeyboard([Markup.callbackButton('Confirm', `submitAll`)])));
   return ctx.wizard.next();
 })
 handler.action('submitAll', (ctx) => {
+  if(ctx.wizard.state.prev == 'true'){
+    const script = ctx.wizard.state.client.redirectPreviousMessages(ctx.wizard.state.origin, ctx.wizard.state.submit[1]);
+    script.stdout.on('end', function(){
+      ctx.wizard.state.client.create();
+    })
+  }
   db.query('INSERT INTO redirect(origin, destination, title) values ($1, $2, $3)', ctx.wizard.state.submit, (err, res) => {
     if (err) throw err;
     ctx.answerCbQuery();
@@ -65,6 +85,7 @@ const exampleWizard = new WizardScene(
   ctx => {
     ctx.wizard.state.arr = [0, 5];
     ctx.wizard.state.submit = [];
+    ctx.wizard.state.origin = null;
     ctx.wizard.state.currentCallbackQuery = 'submitOrigin';
     ctx.wizard.state.message = '💬 Redirect creation wizard';
     ctx.wizard.state.currentRequirement = '\n\nPlease select the origin chat';
@@ -72,6 +93,7 @@ const exampleWizard = new WizardScene(
     ctx.reply(message+currentRequirement, createKeyboard(arr, dialogs, currentCallbackQuery));
     return ctx.wizard.next();
   },
+  handler,
   handler,
   handler,
   handler,

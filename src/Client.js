@@ -23,6 +23,16 @@ class Client{
       })
     })
   }
+  redirectPreviousMessages(origin, destination){
+    const script = spawn('python3', ['./src/python/redirectPreviousMessages.py'], { env: { 
+      'ORIGIN': origin, 
+      "DESTINATION": destination 
+    }});
+    script.stdout.on('data', function(data){
+      console.log(data.toString());
+    })
+    return script;
+  }
 }
 
 module.exports = Client;
