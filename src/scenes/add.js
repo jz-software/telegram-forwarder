@@ -66,6 +66,7 @@ handler.action('submitAll', (ctx) => {
   if(ctx.wizard.state.prev == 'true'){
     const script = ctx.wizard.state.client.redirectPreviousMessages(ctx.wizard.state.origin, ctx.wizard.state.submit[1]);
     script.stdout.on('end', function(){
+      ctx.reply(`📥 Finished copying previous messages [${ctx.wizard.state.submit[2]}]`);
       ctx.wizard.state.client.create();
     })
   }
